@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: connect-one
+    runtime: node
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: BRAVE_API_KEY
+        sync: false
+      - key: GOOGLE_CSE_API_KEY
+        sync: false
+      - key: GOOGLE_CSE_ID
+        sync: false
+      - key: BING_SEARCH_API_KEY
+        sync: false
+      - key: SEARCH_COUNTRY
+        value: JP
+      - key: SEARCH_LANG
+        value: ja
