@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="ja"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#111827"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/icon-192.png"><link rel="manifest" href="manifest.webmanifest">
+<title>Connect ONE</title>
+<style>
+:root{--bg:#f3f6fa;--card:#fff;--ink:#101828;--muted:#667085;--line:#e4e7ec;--soft:#eef2f6;--dark:#111827;--accent:#2563eb}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP",sans-serif}
+button,input,select{font:inherit}button{cursor:pointer}.app{max-width:1320px;margin:auto;padding:14px}
+header{position:sticky;top:0;z-index:30;background:#f3f6faf2;backdrop-filter:blur(14px);display:flex;align-items:center;justify-content:space-between;padding:7px 0 13px}
+.brand{display:flex;gap:10px;align-items:center}.logo{width:43px;height:43px;border-radius:13px;overflow:hidden;background:#fff;display:grid;place-items:center;box-shadow:0 2px 8px #0002}.logo img{width:100%;height:100%;object-fit:cover;display:block}.brand h1{margin:0;font-size:18px}.brand p{margin:2px 0;font-size:11px;color:var(--muted)}
+nav{display:flex;gap:5px;overflow:auto}nav button{border:1px solid var(--line);background:#fff;border-radius:9px;padding:8px 10px;white-space:nowrap}nav button.active{background:var(--dark);color:#fff}
+main{display:grid;gap:13px}.hero{border-radius:22px;padding:28px;background:linear-gradient(135deg,#111827,#334155);color:#fff}.ey{font-size:10px;letter-spacing:.18em;opacity:.7}.hero h2{font-size:clamp(27px,4vw,45px);line-height:1.1;margin:9px 0}.hero p{opacity:.76;max-width:850px}
+.search{display:flex;background:#fff;border-radius:14px;padding:5px;max-width:980px}.search input{flex:1;min-width:0;border:0;outline:0;padding:12px}.search button{border:0;border-radius:10px;padding:11px 17px;background:var(--dark);color:#fff;font-weight:800}.chips{display:flex;gap:6px;overflow:auto;margin-top:8px}.chip{border:1px solid #ffffff40;background:#ffffff12;color:#fff;border-radius:999px;padding:7px 10px;white-space:nowrap}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.card{background:var(--card);border:1px solid var(--line);border-radius:17px;padding:15px;min-width:0}.wide{grid-column:span 2}.card h3{font-size:15px;margin:0 0 9px}.muted{color:var(--muted);font-size:12px}.big{font-size:30px;font-weight:850}.value{font-size:21px;font-weight:800}.row{display:flex;justify-content:space-between;gap:10px;align-items:center}.tools{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}.tools button,.secondary{border:1px solid var(--line);background:var(--soft);border-radius:9px;padding:8px 10px}.map{height:300px;border-radius:12px;overflow:hidden;background:#e9eef5;margin-top:10px}.map iframe{width:100%;height:100%;border:0}.event{border-left:3px solid var(--dark);background:var(--soft);padding:8px 10px;border-radius:0 8px 8px 0;font-size:12px;margin:5px 0}.outfit-score{font-size:34px;font-weight:900}.outfit-note{margin-top:8px}
+.forecast{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-top:10px}.day{background:var(--soft);border-radius:9px;padding:7px;text-align:center;font-size:10px}.day b{display:block;font-size:14px;margin:4px 0}.tide{height:140px;display:flex;gap:4px;align-items:end;padding:4px}.bar{flex:1;border-radius:5px 5px 0 0;background:#cbd5e1;min-height:6px;position:relative}.bar i{position:absolute;bottom:-17px;left:50%;transform:translateX(-50%);font-style:normal;font-size:8px;color:var(--muted)}
+.tabs{display:flex;gap:5px;overflow:auto;margin:9px 0}.tabs button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 10px;white-space:nowrap}.tabs button.active{background:var(--dark);color:#fff}.results{display:grid;grid-template-columns:1fr 1fr;gap:8px}.result{border-top:1px solid var(--line);padding:9px 0}.result a{color:var(--ink);text-decoration:none;font-weight:750}.result p{margin:3px 0;font-size:12px;color:var(--muted)}.status{padding:8px 10px;background:var(--soft);border-radius:8px;font-size:11px;color:var(--muted)}
+footer{text-align:center;padding:24px;color:var(--muted);font-size:11px}
+@media(max-width:950px){.grid{grid-template-columns:1fr 1fr}.wide{grid-column:span 2}}
+@media(max-width:600px){.app{padding:9px}header{display:block}.grid{grid-template-columns:1fr}.wide{grid-column:span 1}.results{grid-template-columns:1fr}.forecast{grid-template-columns:repeat(5,1fr)}}
+</style></head>
+<body><div class="app">
+<header><div class="brand"><div class="logo"><img src="icons/icon-192.png" alt="Connect ONE"></div><div><h1>Connect ONE</h1><p>必要な情報を、ひとつにつなぐ。</p></div></div>
+<nav id="nav"><button class="active" data-go="home">HOME</button><button data-go="search">検索</button><button data-go="weather">天気</button><button data-go="map">MAP</button><button data-go="calendar">予定</button><button data-go="tide">潮汐</button><button data-go="knowledge">Knowledge</button></nav></header>
+
+<main id="home">
+<section class="hero" id="search"><div class="ey">CONNECT ONE / COMMAND CENTER</div><h2>必要な情報を、ひとつにつなぐ。</h2><p>検索した情報を、地図・天気・時間・予定・交通・防災・Knowledgeへつなげる統合情報ターミナル。</p>
+<div class="search" id="locationSearch" style="margin:10px 0 0;max-width:980px">
+<input id="locationQ" placeholder="地点を入力（例：横浜、神戸、東京駅、沖縄）">
+<button type="button" id="locationBtn">地点を表示</button>
+</div>
+<div id="locationStatus" class="status" style="margin-top:8px;background:#ffffff18;color:#fff">地点を選ぶと、天気・日の出/日の入り・地図・潮汐を連動更新します。</div>
+<form class="search" id="searchForm"><input id="q" placeholder="人物・場所・ニュース・歴史・施設・書籍・研究など"><button>統合検索</button></form>
+<div class="chips"><button class="chip" data-q="東京駅">東京駅</button><button class="chip" data-q="織田信長">織田信長</button><button class="chip" data-q="日本の歴史 荘園">日本の歴史 荘園</button><button class="chip" data-q="東京 天気">東京 天気</button></div></section>
+
+<section class="grid">
+<article class="card"><h3>🕐 現在時刻</h3><div class="big" id="clock">--:--:--</div><div class="muted" id="today"></div><div class="tools"><button id="stopwatch">ストップウォッチ</button><button id="timer">タイマー</button></div></article>
+<article class="card" id="weather"><h3>🌤️ 天気 <span id="weatherPlace">— 東京</span></h3><div class="row"><div><div class="big" id="temp">--°C</div><div class="muted" id="weatherText">取得中…</div></div><div class="value" id="wind">-- km/h</div></div><div class="forecast" id="forecast"></div></article>
+<article class="card" id="outfit"><h3>👕 服装指数 <span id="outfitPlace">— 東京</span></h3>
+<div class="row"><div><div class="big" id="outfitIndex">--</div><div class="muted">暖かさ指数（100に近いほど薄着向き）</div></div><div class="value" id="outfitLabel">--</div></div>
+<div id="outfitText" class="status" style="margin-top:9px">天気・気温・風・降水をもとに自動更新します。</div>
+<div class="forecast" id="outfitForecast"></div>
+<div class="muted" style="margin-top:8px">※Connect ONE独自の目安。医療・安全基準ではありません。</div>
+</article>
+<article class="card" id="calendar"><h3>📅 予定</h3><div id="events"></div><div class="tools"><button id="addEvent">予定を追加</button></div></article>
+<article class="card"><h3>☀️🌙 太陽</h3><div class="row"><div><div class="muted">日の出</div><div class="value" id="sunrise">--:--</div></div><div><div class="muted">日の入り</div><div class="value" id="sunset">--:--</div></div></div><div class="muted" style="margin-top:9px">月齢はAPI連携拡張可能</div></article>
+
+<article class="card wide" id="map"><h3>🗺️ MAP / 場所検索</h3><div class="search"><input id="place" placeholder="場所・駅・住所を検索"><button id="placeSearch">検索</button></div><div id="placeStatus" class="status" style="margin-top:8px">OpenStreetMap / Nominatim</div><div class="map"><iframe id="mapFrame" loading="lazy" src="https://www.openstreetmap.org/export/embed.html?bbox=139.72%2C35.65%2C139.82%2C35.72&layer=mapnik"></iframe></div></article>
+
+<article class="card" id="tide"><h3>🌊 タイドグラフ <span id="tidePlaceLabel">— 東京</span></h3>
+<div class="search"><input id="tidePlace" placeholder="潮汐地点（例：東京、横浜、神戸）"><button id="tideSearch">検索</button></div>
+<div id="tideMeta" class="status" style="margin-top:8px">地点を検索すると、その地点に対応する潮汐を表示します。</div>
+<div class="tide" id="tideGraph"></div>
+<div id="tideExtremes" class="muted" style="margin-top:18px"></div>
+<div id="tideStatus" class="muted" style="margin-top:7px">潮位：気象庁「潮位表」の推算値を利用する構成</div>
+</article>
+<article class="card"><h3>🚨 防災</h3><div class="event">気象・防災情報</div><div class="event">地震・津波・警報</div><div class="tools"><button onclick="openExternal('https://www.jma.go.jp/bosai/')">気象庁</button></div></article>
+<article class="card"><h3>🚆 交通</h3><div class="event">駅・路線・経路検索</div><div class="event">目的地への移動情報</div><div class="tools"><button onclick="openExternal('https://www.google.com/maps')">Google Maps</button></div></article>
+
+<article class="card wide" id="knowledge"><h3>📚 Knowledge / 歴史</h3><div class="search"><input id="knowledgeQ" placeholder="人物・事件・制度・歴史用語"><button id="knowledgeBtn">検索</button></div><div id="knowledgeResults"></div></article>
+
+<article class="card wide"><h3>🔎 統合検索</h3><div class="tabs" id="searchTabs"><button class="active" data-type="all">すべて</button><button data-type="web">Web</button><button data-type="news">ニュース</button><button data-type="images">画像</button><button data-type="videos">動画</button><button data-type="maps">地図</button><button data-type="books">書籍</button><button data-type="academic">学術</button><button data-type="history">歴史</button></div><div id="searchStatus" class="status">検索すると複数ソースをまとめて表示します。</div><div class="results" id="searchResults"></div></article>
+</section></main><footer>Connect ONE / Google Sites Embed Edition — Real Data Ready</footer></div>
+
+<script>
+const $=id=>document.getElementById(id), esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function openExternal(u){window.open(u,'_blank','noopener')}
+document.querySelectorAll('#nav button').forEach(b=>b.onclick=()=>$(b.dataset.go).scrollIntoView({behavior:'smooth'}));
+function clock(){const d=new Date();$('clock').textContent=d.toLocaleTimeString('ja-JP');$('today').textContent=d.toLocaleDateString('ja-JP',{year:'numeric',month:'long',day:'numeric',weekday:'short'})}setInterval(clock,1000);clock();
+
+const codeText={0:'快晴',1:'晴れ',2:'一部曇り',3:'曇り',45:'霧',48:'霧',51:'小雨',53:'小雨',55:'雨',61:'雨',63:'雨',65:'強い雨',71:'雪',73:'雪',75:'大雪',80:'にわか雨',81:'にわか雨',82:'強いにわか雨',95:'雷雨',96:'雷雨',99:'雷雨'};
+async function loadWeather(){await updateLocation('東京')}loadWeather();
+
+function renderEvents(){let a=JSON.parse(localStorage.getItem('connectOneEvents')||'[]');$('events').innerHTML=a.length?a.map((x,i)=>`<div class="event">${esc(x)} <button style="float:right;border:0;background:none" onclick="removeEvent(${i})">×</button></div>`).join(''):'<div class="event">予定を追加できます</div>'}
+function removeEvent(i){let a=JSON.parse(localStorage.getItem('connectOneEvents')||'[]');a.splice(i,1);localStorage.setItem('connectOneEvents',JSON.stringify(a));renderEvents()}
+$('addEvent').onclick=()=>{let x=prompt('予定を入力（例：9/25 14:00 名古屋駅）');if(x){let a=JSON.parse(localStorage.getItem('connectOneEvents')||'[]');a.push(x);localStorage.setItem('connectOneEvents',JSON.stringify(a));renderEvents()}};renderEvents();
+
+function drawTide(seed=0){let a=Array.from({length:13},(_,i)=>Math.max(12,Math.round(18+78*Math.abs(Math.sin((i+seed)*.72)) )));$('tideGraph').innerHTML=a.map((v,i)=>`<div class="bar" style="height:${v}%"><i>${i*2}時</i></div>`).join('')}drawTide();
+
+async function placeSearch(q){
+ if(!q)return;$('placeStatus').textContent='検索中…';
+ try{let r=await fetch('https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&q='+encodeURIComponent(q)).then(x=>x.json());if(!r.length){$('placeStatus').textContent='場所が見つかりませんでした';return}let x=r[0],lat=+x.lat,lon=+x.lon,delta=.035;$('placeStatus').textContent=x.display_name;$('mapFrame').src=`https://www.openstreetmap.org/export/embed.html?bbox=${lon-delta}%2C${lat-delta}%2C${lon+delta}%2C${lat+delta}&layer=mapnik&marker=${lat}%2C${lon}`}catch(e){$('placeStatus').textContent='地図検索に失敗しました'}}
+$('placeSearch').onclick=()=>placeSearch($('place').value.trim());$('place').onkeydown=e=>{if(e.key==='Enter')placeSearch(e.target.value.trim())};
+
+
+const TIDE_STATIONS=[
+ {name:'稚内',pref:'hokkaido',lat:45.4167,lon:141.6733},
+ {name:'網走',pref:'hokkaido',lat:44.0206,lon:144.2736},
+ {name:'釧路',pref:'hokkaido',lat:42.9849,lon:144.3814},
+ {name:'函館',pref:'hokkaido',lat:41.7688,lon:140.7288},
+ {name:'青森',pref:'aomori',lat:40.8221,lon:140.7474},
+ {name:'八戸',pref:'aomori',lat:40.5123,lon:141.4883},
+ {name:'宮古',pref:'iwate',lat:39.6414,lon:141.9461},
+ {name:'釜石',pref:'iwate',lat:39.2756,lon:141.8855},
+ {name:'石巻',pref:'miyagi',lat:38.4340,lon:141.3028},
+ {name:'銚子',pref:'chiba',lat:35.7340,lon:140.8268},
+ {name:'東京',pref:'tokyo',lat:35.6531,lon:139.7897},
+ {name:'横浜',pref:'kanagawa',lat:35.4437,lon:139.6380},
+ {name:'小田原',pref:'kanagawa',lat:35.2646,lon:139.1522},
+ {name:'清水港',pref:'shizuoka',lat:35.0150,lon:138.4896},
+ {name:'御前崎',pref:'shizuoka',lat:34.6085,lon:138.2186},
+ {name:'名古屋',pref:'aichi',lat:35.0920,lon:136.8856},
+ {name:'津',pref:'mie',lat:34.7170,lon:136.5160},
+ {name:'大阪',pref:'osaka',lat:34.6500,lon:135.4300},
+ {name:'神戸',pref:'hyogo',lat:34.6826,lon:135.1870},
+ {name:'和歌山',pref:'wakayama',lat:34.2305,lon:135.1708},
+ {name:'高松',pref:'kagawa',lat:34.3428,lon:134.0466},
+ {name:'松山',pref:'ehime',lat:33.8392,lon:132.7657},
+ {name:'高知',pref:'kochi',lat:33.5500,lon:133.5333},
+ {name:'広島',pref:'hiroshima',lat:34.3660,lon:132.4660},
+ {name:'下関',pref:'yamaguchi',lat:33.9578,lon:130.9410},
+ {name:'福岡',pref:'fukuoka',lat:33.5902,lon:130.4017},
+ {name:'長崎',pref:'nagasaki',lat:32.7503,lon:129.8777},
+ {name:'鹿児島',pref:'kagoshima',lat:31.5966,lon:130.5571},
+ {name:'那覇',pref:'okinawa',lat:26.2124,lon:127.6809}
+];
+
+function distanceKm(a,b,c,d){
+ const R=6371, p=Math.PI/180, x=(c-a)*p, y=(d-b)*p;
+ const h=Math.sin(x/2)**2+Math.cos(a*p)*Math.cos(c*p)*Math.sin(y/2)**2;
+ return 2*R*Math.asin(Math.sqrt(h));
+}
+function nearestTideStation(lat,lon){
+ return TIDE_STATIONS.reduce((best,s)=>{
+   const d=distanceKm(lat,lon,s.lat,s.lon);
+   return !best||d<best.d?{s,d}:best;
+ },null);
+}
+function tideApiUrl(station){
+ return `https://japantide.com/api/${encodeURIComponent(station.pref)}/${encodeURIComponent(station.name)}.json`;
+}
+function formatHM(v){
+ try{return new Date(v).toLocaleTimeString('ja-JP',{hour:'2-digit',minute:'2-digit'})}catch(e){return v}
+}
+async function loadTideForStation(station, distance){
+ $('tidePlaceLabel').textContent='— '+station.name;
+ $('tideMeta').textContent=`最近傍潮汐地点：${station.name}（検索地点から約${distance.toFixed(1)} km）`;
+ $('tideStatus').textContent='潮位データを取得中…';
+ try{
+   const r=await fetch(tideApiUrl(station),{cache:'no-store'});
+   if(!r.ok) throw new Error('tide api '+r.status);
+   const data=await r.json();
+   // The public JSON format is intentionally parsed defensively because the provider may add fields.
+   const dayKey=Object.keys(data).find(k=>/^\d{4}-\d{2}-\d{2}$/.test(k)) || Object.keys(data).find(k=>Array.isArray(data[k]));
+   let rows=dayKey?data[dayKey]:data;
+   if(!Array.isArray(rows)){
+     if(Array.isArray(data.data)) rows=data.data;
+     else throw new Error('unknown tide format');
+   }
+   const today=new Date().toISOString().slice(0,10);
+   let points=rows.filter(x=>x && (x.time||x.datetime||x.date||x.t)).slice(0,25);
+   if(!points.length) throw new Error('no points');
+   const vals=points.map(x=>Number(x.tide??x.level??x.height??x.cm??x.value)).filter(Number.isFinite);
+   if(!vals.length) throw new Error('no numeric tide');
+   const min=Math.min(...vals),max=Math.max(...vals),span=Math.max(1,max-min);
+   $('tideGraph').innerHTML=vals.map((v,i)=>{
+     const h=Math.max(8,((v-min)/span)*88+10);
+     const raw=points[i].time||points[i].datetime||points[i].date||points[i].t||'';
+     return `<div class="bar" style="height:${h}%"><i>${esc(formatHM(raw))}</i></div>`;
+   }).join('');
+   $('tideExtremes').textContent=`表示値の範囲：${min} ～ ${max} cm`;
+   $('tideStatus').textContent='気象庁の潮位表を元にした推算潮位データ。実測潮位とは異なります。';
+ }catch(e){
+   $('tideGraph').innerHTML='';
+   $('tideExtremes').textContent='';
+   $('tideStatus').textContent='この環境では潮汐データを取得できませんでした。公式の潮位表を開けます。';
+   const q=encodeURIComponent(station.name);
+   $('tideMeta').innerHTML=`${esc(station.name)}の潮汐地点を選択。 <button class="secondary" onclick="openExternal('https://ds.data.jma.go.jp/gmd/kaiyou/db/tide/suisan/index.php')">気象庁 潮位表</button>`;
+ }
+}
+async function updateLocation(q){
+ if(!q)return;
+ $('locationStatus').textContent='地点を検索しています…';
+ try{
+   const g=await fetch('https://geocoding-api.open-meteo.com/v1/search?name='+encodeURIComponent(q)+'&count=1&language=ja&format=json').then(r=>r.json());
+   if(!g.results?.length) throw new Error('not found');
+   const x=g.results[0],lat=x.latitude,lon=x.longitude,name=x.name||q;
+   $('locationStatus').textContent=`現在地点：${name} / ${x.admin1||''} / ${x.country||''}`;
+   $('weatherPlace').textContent='— '+name;
+   await loadWeatherFor(lat,lon,name);
+   const d=.035;
+   $('mapFrame').src=`https://www.openstreetmap.org/export/embed.html?bbox=${lon-d}%2C${lat-d}%2C${lon+d}%2C${lat+d}&layer=mapnik&marker=${lat}%2C${lon}`;
+   $('place').value=name;
+   const near=nearestTideStation(lat,lon);
+   $('tidePlace').value=near.s.name;
+   await loadTideForStation(near.s,near.d);
+ }catch(e){
+   $('locationStatus').textContent='地点を見つけられませんでした。';
+ }
+}
+function clothingInfo(temp, apparent, wind, rainProb, code){
+ const feels = Number.isFinite(apparent) ? apparent : temp;
+ let idx = Math.round(50 + (feels - 20) * 3.2);
+ if(wind >= 25) idx -= 7;
+ if(wind >= 40) idx -= 8;
+ if(rainProb >= 60) idx -= 5;
+ if([61,63,65,80,81,82,95,96,99].includes(Number(code))) idx -= 4;
+ idx = Math.max(0, Math.min(100, idx));
+ let label, text;
+ if(idx < 20){label='厚手コート'; text='ダウン・厚手コート＋防寒。風が強ければ手袋なども。';}
+ else if(idx < 40){label='コート'; text='コート・厚手アウター向き。朝晩は防寒を意識。';}
+ else if(idx < 55){label='ジャケット'; text='ジャケットや薄手コートが目安。';}
+ else if(idx < 70){label='長袖'; text='長袖シャツ・薄手の羽織りが使いやすい気温。';}
+ else if(idx < 85){label='半袖＋羽織り'; text='半袖中心。室内や朝晩に薄手の羽織りがあると安心。';}
+ else {label='薄着'; text='半袖などの薄着向き。暑さ対策・水分補給も。';}
+ if(rainProb >= 60) text += ' 降水確率が高いため、傘や撥水素材もおすすめ。';
+ else if(wind >= 30) text += ' 風が強いため、体感温度に注意。';
+ return {idx,label,text};
+}
+function clothingLabelForDay(maxT,minT,code,rainProb){
+ const mid=(Number(maxT)+Number(minT))/2;
+ return clothingInfo(mid,mid,0,Number(rainProb||0),code).label;
+}
+async function loadWeatherFor(lat,lon,name){
+ try{
+   const w=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,apparent_temperature,wind_speed_10m,precipitation,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset&timezone=auto&forecast_days=5`).then(r=>r.json());
+   const temp=Number(w.current.temperature_2m);
+   const apparent=Number(w.current.apparent_temperature);
+   const wind=Number(w.current.wind_speed_10m);
+   const rainProb=Number(w.daily.precipitation_probability_max?.[0] ?? 0);
+   $('weatherPlace').textContent='— '+(name||'選択地点');
+   $('outfitPlace').textContent='— '+(name||'選択地点');
+   $('temp').textContent=Math.round(temp)+'°C';
+   $('wind').textContent=Math.round(wind)+' km/h';
+   $('weatherText').textContent=codeText[w.current.weather_code]||'天気';
+   $('sunrise').textContent=new Date(w.daily.sunrise[0]).toLocaleTimeString('ja-JP',{hour:'2-digit',minute:'2-digit'});
+   $('sunset').textContent=new Date(w.daily.sunset[0]).toLocaleTimeString('ja-JP',{hour:'2-digit',minute:'2-digit'});
+   const ci=clothingInfo(temp,apparent,wind,rainProb,w.current.weather_code);
+   $('outfitIndex').textContent=ci.idx;
+   $('outfitLabel').textContent=ci.label;
+   $('outfitText').textContent=`${ci.text} 現在 ${Math.round(temp)}℃ / 体感 ${Math.round(apparent)}℃ / 降水確率 ${rainProb}%`;
+   $('forecast').innerHTML=w.daily.time.map((d,i)=>`<div class="day">${new Date(d).toLocaleDateString('ja-JP',{weekday:'short'})}<b>${Math.round(w.daily.temperature_2m_max[i])}°</b><span>${Math.round(w.daily.temperature_2m_min[i])}°</span></div>`).join('');
+   $('outfitForecast').innerHTML=w.daily.time.map((d,i)=>`<div class="day">${new Date(d).toLocaleDateString('ja-JP',{weekday:'short'})}<b>${esc(clothingLabelForDay(w.daily.temperature_2m_max[i],w.daily.temperature_2m_min[i],w.daily.weather_code[i],w.daily.precipitation_probability_max?.[i]||0))}</b><span>${w.daily.precipitation_probability_max?.[i]||0}%</span></div>`).join('');
+ }catch(e){
+   $('weatherText').textContent='天気データを取得できませんでした';
+   $('outfitText').textContent='服装指数を取得できませんでした';
+ }
+}
+$('locationBtn').onclick=()=>updateLocation($('locationQ').value.trim());
+$('locationQ').onkeydown=e=>{if(e.key==='Enter')updateLocation(e.target.value.trim())};
+$('tideSearch').onclick=async()=>{
+ const q=$('tidePlace').value.trim();
+ if(!q)return;
+ try{
+  const g=await fetch('https://geocoding-api.open-meteo.com/v1/search?name='+encodeURIComponent(q)+'&count=1&language=ja&format=json').then(r=>r.json());
+  if(!g.results?.length)throw new Error('not found');
+  const near=nearestTideStation(g.results[0].latitude,g.results[0].longitude);
+  await loadTideForStation(near.s,near.d);
+ }catch(e){$('tideStatus').textContent='潮汐地点を検索できませんでした'}
+};
+
+let currentType='all',lastQuery='';
+document.querySelectorAll('#searchTabs button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#searchTabs button').forEach(x=>x.classList.remove('active'));b.classList.add('active');currentType=b.dataset.type;if(lastQuery)runSearch(lastQuery)});
+$('searchForm').onsubmit=e=>{e.preventDefault();runSearch($('q').value.trim())};
+document.querySelectorAll('.chip').forEach(b=>b.onclick=()=>{$('q').value=b.dataset.q;runSearch(b.dataset.q)});
+$('knowledgeBtn').onclick=()=>{let q=$('knowledgeQ').value.trim();if(q){$('q').value=q;runSearch(q);document.getElementById('search').scrollIntoView({behavior:'smooth'})}};
+
+async function runSearch(q){
+ if(!q)return;
+ lastQuery=q;
+ $('searchStatus').textContent='検索中…';
+ $('searchResults').innerHTML='';
+ let jobs=[];
+ if(currentType==='all'||currentType==='history')jobs.push(fetch('https://ja.wikipedia.org/w/api.php?action=query&list=search&srsearch='+encodeURIComponent(q)+'&srlimit=6&format=json&origin=*').then(r=>r.json()).then(x=>(x.query?.search||[]).map(v=>({kind:'📚 歴史/百科',title:v.title,url:'https://ja.wikipedia.org/wiki/'+encodeURIComponent(v.title),desc:v.snippet.replace(/<[^>]+>/g,'')}))).catch(()=>[]));
+ if(currentType==='all'||currentType==='books')jobs.push(fetch('https://openlibrary.org/search.json?q='+encodeURIComponent(q)+'&limit=6').then(r=>r.json()).then(x=>(x.docs||[]).map(v=>({kind:'📖 書籍',title:v.title,url:'https://openlibrary.org'+(v.key||''),desc:(v.author_name||[]).join(', ')}))).catch(()=>[]));
+ if(currentType==='all'||currentType==='academic')jobs.push(fetch('https://api.openalex.org/works?search='+encodeURIComponent(q)+'&per-page=6').then(r=>r.json()).then(x=>(x.results||[]).map(v=>({kind:'🎓 学術',title:v.title,url:v.doi||v.id,desc:'OpenAlex / '+(v.publication_year||'')}))).catch(()=>[]));
+ if(currentType==='all'||currentType==='maps')jobs.push(fetch('https://nominatim.openstreetmap.org/search?format=jsonv2&limit=6&q='+encodeURIComponent(q)).then(r=>r.json()).then(x=>(x||[]).map(v=>({kind:'🗺️ 地図',title:v.display_name,url:`https://www.openstreetmap.org/${v.osm_type}/${v.osm_id}`,desc:'OpenStreetMap'}))).catch(()=>[]));
+ if(currentType==='web'||currentType==='news'||currentType==='images'||currentType==='videos'){
+   jobs.push(fetch('/api/search?type='+encodeURIComponent(currentType)+'&q='+encodeURIComponent(q)).then(r=>r.ok?r.json():[]).then(x=>Array.isArray(x)?x:(x.results||[])).catch(()=>[]));
+ }
+ const groups=await Promise.all(jobs);
+ let a=groups.flat();
+ if(currentType==='web'||currentType==='news'||currentType==='images'||currentType==='videos')a=a.map(v=>({kind:v.kind||currentType,title:v.title||v.name||'検索結果',url:v.url||v.link||'#',desc:v.description||v.snippet||v.source||''}));
+ $('searchStatus').textContent=`「${q}」 / ${a.length}件`;
+ $('searchResults').innerHTML=a.map(v=>`<div class="result"><div class="muted">${esc(v.kind)}</div><a href="${esc(v.url)}" target="_blank" rel="noopener">${esc(v.title)}</a><p>${esc(v.desc)}</p></div>`).join('')||'<div class="muted">結果がありません。API接続または検索語を確認してください。</div>';
+}
+$('stopwatch').onclick=()=>{let b=$('stopwatch'),start=Date.now(),on=true;b.textContent='停止';let i=setInterval(()=>{if(!on){clearInterval(i);return}b.textContent=((Date.now()-start)/1000).toFixed(1)+'秒'},100);b.onclick=()=>{on=false;b.textContent='ストップウォッチ'}};
+$('timer').onclick=()=>{let m=prompt('タイマー（分）','5');if(m&&Number(m)>0){$('timer').textContent='実行中';setTimeout(()=>{alert('タイマー終了');$('timer').textContent='タイマー'},Number(m)*60000)}};
+</script></body></html>
